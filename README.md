@@ -1,91 +1,69 @@
-DevOps Practice Project – Dist Directory
+# Brain Tasks App - DevOps Deployment Project
 
-This repository contains the production-ready build files (dist folder) for DevOps practice and deployment exercises.
+## Project Overview
+Complete CI/CD pipeline deployment using Docker, Kubernetes (AWS EKS), and AWS CodePipeline.
 
-It is intentionally structured to help learners focus on CI/CD pipelines, hosting, containerization, and infrastructure setup rather than application development.
+## Architecture
+## Setup Instructions
 
-📁 What This Repository Contains
+### Prerequisites
+- AWS Account
+- GitHub Account  
+- Docker
+- kubectl, eksctl, aws-cli
 
-dist/ – Compiled and production-ready static files
+### Local Testing
+```bash
+git clone https://github.com/Iniyavan777/Brain-Tasks-App.git
+cd Brain-Tasks-App
 
-HTML
+# Docker build and test
+docker build -t brain-tasks-app:1.0 .
+docker run -d -p 3000:3000 brain-tasks-app:1.0
+```
 
-CSS
+### EKS Cluster
+```bash
+eksctl create cluster \
+  --name brain-tasks-cluster \
+  --region us-east-1 \
+  --node-type t3.micro \
+  --nodes 2
 
-JavaScript
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+```
 
-Assets (images, fonts, etc.)
+## CI/CD Pipeline
 
-These files are ready to deploy to:
+### CodeBuild
+- Builds Docker image from Dockerfile
+- Pushes to ECR
+- Triggered on GitHub push
 
-Web servers (Nginx / Apache)
+### CodePipeline  
+- **Source:** GitHub
+- **Build:** CodeBuild
+- **Deploy:** EKS
 
-Cloud platforms (AWS S3, Azure Blob, GCP Storage)
+## Application Access
 
-Containerized environments (Docker + Nginx)
+**LoadBalancer URL:** http://a1b7ca885026c446ea96299e1e9bf68b-1935259213.us-east-1.elb.amazonaws.com
 
-Kubernetes clusters
+**LoadBalancer ARN:** arn:aws:elasticloadbalancing:us-east-1:027654771473:loadbalancer/net/k8s-braintasks-xxxxxxxx/xxxxxxxxxxxxxxxx
 
-CI/CD pipeline demonstrations
+## Files
+- `Dockerfile` - Container image definition
+- `nginx.conf` - Nginx web server config
+- `buildspec.yml` - CodeBuild configuration
+- `k8s/deployment.yaml` - Kubernetes deployment
+- `k8s/service.yaml` - LoadBalancer service
 
-🎯 Purpose of This Repository
+## Submission
+- GitHub: https://github.com/Iniyavan777/Brain-Tasks-App
+- EKS Cluster: brain-tasks-cluster (us-east-1)
+- Pipeline: brain-tasks-pipeline (CodePipeline)
 
-This repository is designed for:
-
-DevOps beginners
-
-CI/CD practice
-
-Deployment pipeline testing
-
-Docker & Kubernetes deployment exercises
-
-Web server configuration practice
-
-Reverse proxy and load balancer setup
-
-The goal is to simulate real-world deployment scenarios using already built application files.
-
-❓ Why is there NO package.json?
-
-You may notice that this repository does not include:
-
-package.json
-
-node_modules
-
-Source code (src/)
-
-Build tools configuration
-
-✅ Reason:
-
-This repository only contains the final production build output (dist), not the development source code.
-
-In a typical project:
-
-Developers write source code.
-
-The project is built using tools like:
-
-Node.js
-
-Webpack
-
-Vite
-
-React (or other frameworks)
-
-A dist/ folder is generated.
-
-Only the production build is deployed to servers.
-
-This repository represents step 4 only.
-
-Since this is already the compiled output:
-
-No dependencies are required
-
-No build process is required
-
-No package.json is needed
+---
+**Date:** June 22, 2026
+**Author:** Iniya
