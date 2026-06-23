@@ -1,26 +1,17 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Logging in to Docker Hub...
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t iniyacloud03/brain-tasks-app:latest .
-      - docker tag iniyacloud03/brain-tasks-app:latest iniyacloud03/brain-tasks-app:$CODEBUILD_BUILD_NUMBER
+      - echo Build phase started on `date`
+      - echo Image already exists on DockerHub
+      - docker pull iniyacloud03/brain-tasks-app:1.0
+      - printf '[{"name":"brain-tasks-app","imageUri":"iniyacloud03/brain-tasks-app:1.0"}]' > imagedefinitions.json
 
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push iniyacloud03/brain-tasks-app:latest
-      - docker push iniyacloud03/brain-tasks-app:$CODEBUILD_BUILD_NUMBER
-      - echo Writing image definitions file...
-      - printf '[{"name":"brain-tasks-app","imageUri":"%s"}]' iniyacloud03/brain-tasks-app:latest > imagedefinitions.json
+      - echo Build phase completed on `date`
+      - cat imagedefinitions.json
 
 artifacts:
   files:
